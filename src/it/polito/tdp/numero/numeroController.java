@@ -35,7 +35,7 @@ public class numeroController {
     boolean ingame=false;
     private int segreto=0;
     private int tentativiFatti=0;
-    final int tentativiMassimi=5;
+    final int tentativiMassimi=6;
     @FXML
     
     void handleNuovaPartita(ActionEvent event) {
