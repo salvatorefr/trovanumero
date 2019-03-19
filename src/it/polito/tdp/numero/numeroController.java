@@ -2,6 +2,8 @@ package it.polito.tdp.numero;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import it.polito.tdp.numero.model.NumeroModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
@@ -10,9 +12,9 @@ import javafx.scene.layout.HBox;
 
 
 public class numeroController {
-	
-	
-    @FXML
+	NumeroModel model;
+		
+	@FXML
     private ResourceBundle resources;
 
     @FXML
@@ -32,65 +34,53 @@ public class numeroController {
 
     @FXML
     private TextArea txtmessaggi;
-    boolean ingame=false;
-    private int segreto=0;
-    private int tentativiFatti=0;
-    final int tentativiMassimi=6;
+   
     @FXML
     
     void handleNuovaPartita(ActionEvent event) {
-    	//crea una nuova partita
-    	//grafica
-     this.rimasti.setText(Integer.toString(this.tentativiMassimi));
-    this.boxControlloPartita.setDisable(true);
+    
+        this.boxControlloPartita.setDisable(true);
     	this.boxControlloTentativo.setDisable(false);
     	this.txtmessaggi.clear();
-    	this.tentativo.clear();
-    	ingame=true;
-    	this.tentativiFatti=0;
-    	//logica
-    	//crea numero
-    	this.segreto= (int)((Math.random()*100)+1);
-    	
-    	
-    
-
+    	this.rimasti.setText(Integer.toString(model.getTmax()));
+    	model.newGame(); 	
+    	    	
     }
+    
     //funzione che termina la partita
- public void fine() {
-	 ingame= false;
+    public void fine() {
 	 this.boxControlloPartita.setDisable(false);
 	 this.boxControlloTentativo.setDisable(true);
-	 return;
-	
- 
+	 model.termina();
+	 
  }
  
     @FXML
     void handleProva(ActionEvent event) {
-     if (this.tentativo.getLength()==0) {scrivi("inserisci un numero\n");return;}
-     try { int prova = Integer.parseInt(this.tentativo.getText());
-     this.tentativiFatti++;
-     this.rimasti.setText(Integer.toString(this.tentativiMassimi-this.tentativiFatti)) ;
-     
-   
-     if (ingame==true) {
-    	 if (prova==this.segreto) {scrivi("complimenti, hai indovinato\n");
-     	fine(); return;}
-    	 else if (this.tentativiFatti==this.tentativiMassimi) {scrivi("HAI PERSO, il numero era: "+this.segreto);fine();return;}
-    		 
-    	 if (prova<=this.segreto) {scrivi("troppo piccolo\n");}
-    	 if (prova>=this.segreto) {scrivi("troppo grande\n");return;}
-     	}
-    }catch ( NumberFormatException badData )
-    {scrivi("non hai inserito un numero valido\n");
-    }
+    	String ts= this.tentativo.getText();
+    	int tent;
+    	try { tent = Integer.parseInt(ts);    
+    		}catch ( NumberFormatException badData )
+          	{scrivi("non hai inserito un numero valido\n");return;
+          	}
+    if (!model.tentativoValido(tent)) {this.txtmessaggi.appendText("range non valido");
+    return;
     }
     
+    int risultato= model.tentativo(tent);
+    if (risultato==0) {scrivi("hai indovinato\n");this.fine();}
+    else if (risultato==1) {scrivi("troppo grande\n");}
+    	else if (risultato==-1) {scrivi("troppo piccolo\n");}
+    this.rimasti.setText(Integer.toString(model.getTmax()-model.getTentativiFatti()));
+   if ((model.getTmax()-model.getTentativiFatti())==0) {this.fine() ;}
+    
+    }
     
     public void scrivi(String a) {
     	this.txtmessaggi.appendText(a);
     }
+    
+
     @FXML
     void handleProvaTentativo(ActionEvent event) {
 
@@ -105,4 +95,8 @@ public class numeroController {
         assert txtmessaggi != null : "fx:id=\"txtmessaggi\" was not injected: check your FXML file 'numero.fxml'.";
 
     }
+
+    public void setModel(NumeroModel model) {
+		this.model = model;
+	}
 }
