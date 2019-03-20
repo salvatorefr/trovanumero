@@ -37,7 +37,7 @@ public class NumeroModel{
 		if (t==this.segreto) {this.inGame=false; return 0;}
 		if (t>this.segreto) {return 1;}
 		return -1;
-		
+	
 		}
 	
 	
@@ -56,6 +56,10 @@ public class NumeroModel{
 	}
 	public int getTmax() {
 		return Tmax;
+	}
+	public int getSegreto() {
+		
+		return segreto;
 	}
 	
 		

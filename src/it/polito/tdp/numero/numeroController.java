@@ -51,7 +51,7 @@ public class numeroController {
     public void fine() {
 	 this.boxControlloPartita.setDisable(false);
 	 this.boxControlloTentativo.setDisable(true);
-	 model.termina();
+	
 	 
  }
  
@@ -72,7 +72,9 @@ public class numeroController {
     else if (risultato==1) {scrivi("troppo grande\n");}
     	else if (risultato==-1) {scrivi("troppo piccolo\n");}
     this.rimasti.setText(Integer.toString(model.getTmax()-model.getTentativiFatti()));
-   if ((model.getTmax()-model.getTentativiFatti())==0) {this.fine() ;this.scrivi("hai esaurito tutti i tentativi");}
+    if (!model.isInGame()) {
+   this.scrivi("hai esaurito tutti i tentativi\n il numero era: "+model.getSegreto());this.fine();
+   }
     
     }
     
