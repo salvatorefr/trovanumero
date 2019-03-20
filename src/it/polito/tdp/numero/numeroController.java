@@ -68,11 +68,11 @@ public class numeroController {
     }
     
     int risultato= model.tentativo(tent);
-    if (risultato==0) {scrivi("hai indovinato\n");this.fine();}
+    if (risultato==0) {scrivi(String.format("hai indovinato in %d tentativi\n",model.getTentativiFatti()));this.fine();return;}
     else if (risultato==1) {scrivi("troppo grande\n");}
     	else if (risultato==-1) {scrivi("troppo piccolo\n");}
     this.rimasti.setText(Integer.toString(model.getTmax()-model.getTentativiFatti()));
-   if ((model.getTmax()-model.getTentativiFatti())==0) {this.fine() ;}
+   if ((model.getTmax()-model.getTentativiFatti())==0) {this.fine() ;this.scrivi("hai esaurito tutti i tentativi");}
     
     }
     
